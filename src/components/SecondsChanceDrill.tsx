@@ -46,7 +46,7 @@ interface GameSession {
 
 const SecondsChanceDrill: React.FC = () => {
   const scoreCardRef = useRef<HTMLDivElement>(null);
-  const { user, profile } = useAuth();
+  const { user, isPremium } = useAuth();
 
   const [gameState, setGameState] = useState<'setup' | 'playing' | 'endComplete' | 'summary'>('setup');
   const [currentEnd, setCurrentEnd] = useState(0);
@@ -287,7 +287,7 @@ const SecondsChanceDrill: React.FC = () => {
       return;
     }
 
-    if (!profile?.is_premium) {
+    if (!isPremium) {
       alert('Saving game history is a premium feature');
       return;
     }
@@ -337,7 +337,7 @@ const SecondsChanceDrill: React.FC = () => {
       return;
     }
 
-    if (!profile?.is_premium) {
+    if (!isPremium) {
       alert('Email functionality is a premium feature');
       return;
     }
@@ -594,7 +594,7 @@ const SecondsChanceDrill: React.FC = () => {
                 Start Game
               </button>
 
-              {user && profile?.is_premium && (
+              {user && isPremium && (
                 <button
                   onClick={() => setShowHistory(true)}
                   className="flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
@@ -952,7 +952,7 @@ const SecondsChanceDrill: React.FC = () => {
           <div className="flex flex-wrap gap-4">
             <button
               onClick={downloadImage}
-              disabled={!profile?.is_premium}
+              disabled={!isPremium}
               className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               <Download size={20} />
@@ -961,7 +961,7 @@ const SecondsChanceDrill: React.FC = () => {
 
             <button
               onClick={saveSession}
-              disabled={isSaving || !profile?.is_premium}
+              disabled={isSaving || !isPremium}
               className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               <Calendar size={20} />
@@ -975,12 +975,12 @@ const SecondsChanceDrill: React.FC = () => {
               value={emailAddress}
               onChange={(e) => setEmailAddress(e.target.value)}
               placeholder="Email address"
-              disabled={!profile?.is_premium}
+              disabled={!isPremium}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#547A51] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
             <button
               onClick={sendEmail}
-              disabled={isSendingEmail || !profile?.is_premium}
+              disabled={isSendingEmail || !isPremium}
               className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               <Mail size={20} />
@@ -988,7 +988,7 @@ const SecondsChanceDrill: React.FC = () => {
             </button>
           </div>
 
-          {!profile?.is_premium && (
+          {!isPremium && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
               <p className="font-semibold mb-1">Premium Feature</p>
               <p>Upgrade to premium to download, save game history, and email results.</p>
