@@ -137,7 +137,7 @@ const drillsData: Record<string, any> = {
     ],
     objectives: [
       'Develop precise weight control for position play',
-      'Build ambidextrous bowling skills',
+      'Build FH / BH bowling skills',
       'Practice finishing bowls in specific zones',
       'Improve consistency on both forehand and backhand',
       'Master position bowling for seconds role',
