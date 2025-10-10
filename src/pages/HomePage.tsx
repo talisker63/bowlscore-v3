@@ -42,6 +42,14 @@ const HomePage: React.FC = () => {
       comingSoon: false,
     },
     {
+      id: '40-bowls-draw',
+      title: '40 Bowls Draw Drill',
+      icon: Crosshair,
+      description: 'Comprehensive draw shot practice drill',
+      isPremium: true,
+      comingSoon: false,
+    },
+    {
       id: 'draw-shot',
       title: 'Draw Shot',
       icon: Target,
@@ -72,14 +80,6 @@ const HomePage: React.FC = () => {
       description: 'Improve your line selection skills',
       isPremium: true,
       comingSoon: true,
-    },
-    {
-      id: '40-bowls-draw',
-      title: '40 Bowls Draw Drill',
-      icon: Crosshair,
-      description: 'Comprehensive draw shot practice drill',
-      isPremium: true,
-      comingSoon: false,
     },
   ];
 
