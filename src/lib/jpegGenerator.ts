@@ -146,10 +146,13 @@ export async function generateScorecardJPEG(
   ctx.font = '13px Arial, sans-serif';
   ctx.fillText(`Date Played: ${dateString}`, canvas.width / 2, dateY);
 
-  const copyrightY = canvas.height - footerHeight / 2;
+  const copyrightY = canvas.height - footerHeight / 2 - 8;
   ctx.fillStyle = '#666';
   ctx.font = '12px Arial, sans-serif';
   ctx.fillText('© Copyright Andrew Sleight 2025', canvas.width / 2, copyrightY);
+
+  ctx.font = '10px Arial, sans-serif';
+  ctx.fillText('All Rights Reserved', canvas.width / 2, copyrightY + 16);
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {

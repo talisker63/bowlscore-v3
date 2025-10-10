@@ -17,7 +17,10 @@ const Footer: React.FC = () => {
               <MessageSquare className="w-5 h-5" />
               <span>Send Feedback or Suggest a Drill</span>
             </button>
-            <p className="text-sm">© Copyright Andrew Sleight 2025</p>
+            <div className="text-center">
+              <p className="text-sm">© Copyright Andrew Sleight 2025</p>
+              <p className="text-xs mt-1">All Rights Reserved</p>
+            </div>
           </div>
         </div>
       </footer>

@@ -31,6 +31,7 @@ const HomePage: React.FC = () => {
       icon: Users,
       description: 'Two-player competitive drill with scoring',
       isPremium: false,
+      comingSoon: false,
     },
     {
       id: 'seconds-chance',
@@ -38,6 +39,7 @@ const HomePage: React.FC = () => {
       icon: RefreshCw,
       description: 'Position practice with alternating hands',
       isPremium: true,
+      comingSoon: false,
     },
     {
       id: 'draw-shot',
@@ -45,6 +47,7 @@ const HomePage: React.FC = () => {
       icon: Target,
       description: 'Master the fundamental draw shot technique',
       isPremium: false,
+      comingSoon: true,
     },
     {
       id: 'running-shot',
@@ -52,6 +55,7 @@ const HomePage: React.FC = () => {
       icon: TrendingUp,
       description: 'Perfect your running shot accuracy',
       isPremium: true,
+      comingSoon: true,
     },
     {
       id: 'weight-control',
@@ -59,6 +63,7 @@ const HomePage: React.FC = () => {
       icon: BarChart3,
       description: 'Develop consistent weight control',
       isPremium: true,
+      comingSoon: true,
     },
     {
       id: 'line-control',
@@ -66,6 +71,7 @@ const HomePage: React.FC = () => {
       icon: Award,
       description: 'Improve your line selection skills',
       isPremium: true,
+      comingSoon: true,
     },
     {
       id: '40-bowls-draw',
@@ -73,6 +79,7 @@ const HomePage: React.FC = () => {
       icon: Crosshair,
       description: 'Comprehensive draw shot practice drill',
       isPremium: true,
+      comingSoon: false,
     },
   ];
 
@@ -139,7 +146,12 @@ const HomePage: React.FC = () => {
                   to={`/drill/${drill.id}`}
                   className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 group relative overflow-hidden"
                 >
-                  {drill.isPremium && (
+                  {drill.comingSoon && (
+                    <div className="absolute top-3 right-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                      Coming Soon
+                    </div>
+                  )}
+                  {drill.isPremium && !drill.comingSoon && (
                     <div className="absolute top-3 right-3 bg-[#547A51] text-white text-xs px-2 py-1 rounded-full">
                       Premium
                     </div>
