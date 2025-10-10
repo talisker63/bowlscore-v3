@@ -959,7 +959,7 @@ const LeadVsLeadDrill: React.FC = () => {
           <div className="flex flex-wrap gap-4">
             <button
               onClick={downloadImage}
-              disabled={!user || !profile?.is_premium}
+              disabled={!profile?.is_premium}
               className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               <Download size={20} />
@@ -968,31 +968,31 @@ const LeadVsLeadDrill: React.FC = () => {
 
             <button
               onClick={saveSession}
-              disabled={isSaving || !user || !profile?.is_premium}
+              disabled={isSaving || !profile?.is_premium}
               className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               <Calendar size={20} />
               {isSaving ? 'Saving...' : 'Save Game'}
             </button>
+          </div>
 
-            <div className="flex gap-2 flex-1 min-w-[300px]">
-              <input
-                type="email"
-                value={emailAddress}
-                onChange={(e) => setEmailAddress(e.target.value)}
-                placeholder="Email address"
-                disabled={!user || !profile?.is_premium}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#547A51] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-              />
-              <button
-                onClick={sendEmail}
-                disabled={isSendingEmail || !user || !profile?.is_premium}
-                className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
-              >
-                <Mail size={20} />
-                {isSendingEmail ? 'Sending...' : 'Email'}
-              </button>
-            </div>
+          <div className="space-y-3">
+            <input
+              type="email"
+              value={emailAddress}
+              onChange={(e) => setEmailAddress(e.target.value)}
+              placeholder="Email address"
+              disabled={!profile?.is_premium}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#547A51] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+            />
+            <button
+              onClick={sendEmail}
+              disabled={isSendingEmail || !profile?.is_premium}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+            >
+              <Mail size={20} />
+              {isSendingEmail ? 'Sending...' : 'Email'}
+            </button>
           </div>
 
           {!profile?.is_premium && (
