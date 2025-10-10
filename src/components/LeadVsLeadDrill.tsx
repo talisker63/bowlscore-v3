@@ -609,12 +609,23 @@ const LeadVsLeadDrill: React.FC = () => {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-[#34533A]">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-[#34533A] mb-4">
               End {currentEnd + 1} of {numberOfEnds}
             </h1>
-            <div className="text-lg font-semibold text-[#547A51]">
-              {playerAName}: {ends.length > 0 ? ends[ends.length - 1].playerACumulative : 0} | {playerBName}: {ends.length > 0 ? ends[ends.length - 1].playerBCumulative : 0}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center">
+                <div className="text-sm text-gray-600">{playerAName}</div>
+                <div className="text-2xl font-bold text-[#547A51]">
+                  {ends.length > 0 ? ends[ends.length - 1].playerACumulative : 0}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-gray-600">{playerBName}</div>
+                <div className="text-2xl font-bold text-[#547A51]">
+                  {ends.length > 0 ? ends[ends.length - 1].playerBCumulative : 0}
+                </div>
+              </div>
             </div>
           </div>
 
