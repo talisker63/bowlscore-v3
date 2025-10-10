@@ -33,18 +33,18 @@ const HomePage: React.FC = () => {
       isPremium: false,
     },
     {
-      id: 'draw-shot',
-      title: 'Draw Shot',
-      icon: Target,
-      description: 'Master the fundamental draw shot technique',
-      isPremium: false,
-    },
-    {
       id: 'seconds-chance',
       title: '2nd\'s Chance',
       icon: RefreshCw,
       description: 'Position practice with alternating hands',
       isPremium: true,
+    },
+    {
+      id: 'draw-shot',
+      title: 'Draw Shot',
+      icon: Target,
+      description: 'Master the fundamental draw shot technique',
+      isPremium: false,
     },
     {
       id: 'running-shot',
