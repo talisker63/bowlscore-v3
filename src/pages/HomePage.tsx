@@ -26,6 +26,13 @@ const HomePage: React.FC = () => {
   };
   const drills = [
     {
+      id: 'lead-vs-lead',
+      title: 'Lead vs Lead',
+      icon: Users,
+      description: 'Two-player competitive drill with scoring',
+      isPremium: false,
+    },
+    {
       id: 'draw-shot',
       title: 'Draw Shot',
       icon: Target,
@@ -33,11 +40,11 @@ const HomePage: React.FC = () => {
       isPremium: false,
     },
     {
-      id: 'lead-vs-lead',
-      title: 'Lead vs Lead',
-      icon: Users,
-      description: 'Two-player competitive drill with scoring',
-      isPremium: false,
+      id: 'seconds-chance',
+      title: '2nd\'s Chance',
+      icon: RefreshCw,
+      description: 'Position practice with alternating hands',
+      isPremium: true,
     },
     {
       id: 'running-shot',
@@ -65,13 +72,6 @@ const HomePage: React.FC = () => {
       title: '40 Bowls Draw Drill',
       icon: Crosshair,
       description: 'Comprehensive draw shot practice drill',
-      isPremium: true,
-    },
-    {
-      id: 'seconds-chance',
-      title: '2nd\'s Chance',
-      icon: RefreshCw,
-      description: 'Position practice with alternating hands',
       isPremium: true,
     },
   ];
