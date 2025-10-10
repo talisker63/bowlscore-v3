@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, Award, BarChart3, Users, ClipboardList, TrendingUp, Crosshair } from 'lucide-react';
+import { Target, Award, BarChart3, Users, ClipboardList, TrendingUp, Crosshair, RefreshCw } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Hero from '../components/Hero';
 import { useAuth } from '../contexts/AuthContext';
@@ -65,6 +65,13 @@ const HomePage: React.FC = () => {
       title: '40 Bowls Draw Drill',
       icon: Crosshair,
       description: 'Comprehensive draw shot practice drill',
+      isPremium: true,
+    },
+    {
+      id: 'seconds-chance',
+      title: '2nd\'s Chance',
+      icon: RefreshCw,
+      description: 'Position practice with alternating hands',
       isPremium: true,
     },
   ];

@@ -5,6 +5,7 @@ import { Play, Lock, CheckCircle } from 'lucide-react';
 import AuthModal from '../components/AuthModal';
 import FortyBowlsDrawDrill from '../components/FortyBowlsDrawDrill';
 import LeadVsLeadDrill from '../components/LeadVsLeadDrill';
+import SecondsChanceDrill from '../components/SecondsChanceDrill';
 
 const drillsData: Record<string, any> = {
   'draw-shot': {
@@ -117,6 +118,29 @@ const drillsData: Record<string, any> = {
       'Improve consistency and accuracy',
       'Minimize penalties (crossed and short bowls)',
       'Build strategic thinking for shot selection',
+    ],
+  },
+  'seconds-chance': {
+    title: '2nd\'s Chance',
+    description: 'Position practice drill with alternating hand starts each end.',
+    isPremium: true,
+    heroImage: '/20250406_144511.jpg',
+    hasCustomComponent: true,
+    instructions: [
+      'Set up a game for 2 players with 2 or 4 bowls per player',
+      'Players alternate who starts forehand each end',
+      'Bowl 1: Must finish between jack and 2m beyond, within mat length to side, without crossing',
+      'Bowls 2-4: Must finish within mat length of jack',
+      'First 2 bowls on one hand, next 2 bowls on opposite hand',
+      'Score 1 point per successful bowl, no penalties',
+      'Track forehand and backhand success rates',
+    ],
+    objectives: [
+      'Develop precise weight control for position play',
+      'Build ambidextrous bowling skills',
+      'Practice finishing bowls in specific zones',
+      'Improve consistency on both forehand and backhand',
+      'Master position bowling for seconds role',
     ],
   },
 };
@@ -254,6 +278,12 @@ const DrillPage: React.FC = () => {
         {drillStarted && canAccess && drill.hasCustomComponent && drillId === 'lead-vs-lead' && (
           <div className="mt-8">
             <LeadVsLeadDrill />
+          </div>
+        )}
+
+        {drillStarted && canAccess && drill.hasCustomComponent && drillId === 'seconds-chance' && (
+          <div className="mt-8">
+            <SecondsChanceDrill />
           </div>
         )}
 
