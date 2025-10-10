@@ -618,14 +618,34 @@ const LeadVsLeadDrill: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div className="space-y-6 mb-8">
             <div>
               <h3 className="text-lg font-semibold text-[#34533A] mb-4">{playerAName}</h3>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => (
                   <div key={i} className="border border-gray-200 rounded-lg p-3">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-semibold text-gray-700 w-16">Bowl {i + 1}:</span>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={currentEndBowls.playerA[i].crossed}
+                            onChange={() => toggleBowlCrossed('playerA', i)}
+                            className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                          />
+                          <span className="text-xs text-gray-700">X</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={currentEndBowls.playerA[i].short}
+                            onChange={() => toggleBowlShort('playerA', i)}
+                            className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                          />
+                          <span className="text-xs text-gray-700">S</span>
+                        </label>
+                      </div>
+                      <span className="text-sm font-semibold text-gray-700">Bowl {i + 1}</span>
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -636,26 +656,6 @@ const LeadVsLeadDrill: React.FC = () => {
                         <span className="text-sm font-medium text-gray-700">GOOD</span>
                       </label>
                     </div>
-                    <div className="flex gap-4 ml-20">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={currentEndBowls.playerA[i].crossed}
-                          onChange={() => toggleBowlCrossed('playerA', i)}
-                          className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-                        />
-                        <span className="text-sm text-gray-700">CROSSED</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={currentEndBowls.playerA[i].short}
-                          onChange={() => toggleBowlShort('playerA', i)}
-                          className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-                        />
-                        <span className="text-sm text-gray-700">SHORT</span>
-                      </label>
-                    </div>
                   </div>
                 ))}
               </div>
@@ -663,11 +663,31 @@ const LeadVsLeadDrill: React.FC = () => {
 
             <div>
               <h3 className="text-lg font-semibold text-[#34533A] mb-4">{playerBName}</h3>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => (
                   <div key={i} className="border border-gray-200 rounded-lg p-3">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-semibold text-gray-700 w-16">Bowl {i + 1}:</span>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={currentEndBowls.playerB[i].crossed}
+                            onChange={() => toggleBowlCrossed('playerB', i)}
+                            className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                          />
+                          <span className="text-xs text-gray-700">X</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={currentEndBowls.playerB[i].short}
+                            onChange={() => toggleBowlShort('playerB', i)}
+                            className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                          />
+                          <span className="text-xs text-gray-700">S</span>
+                        </label>
+                      </div>
+                      <span className="text-sm font-semibold text-gray-700">Bowl {i + 1}</span>
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="checkbox"
@@ -676,26 +696,6 @@ const LeadVsLeadDrill: React.FC = () => {
                           className="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500"
                         />
                         <span className="text-sm font-medium text-gray-700">GOOD</span>
-                      </label>
-                    </div>
-                    <div className="flex gap-4 ml-20">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={currentEndBowls.playerB[i].crossed}
-                          onChange={() => toggleBowlCrossed('playerB', i)}
-                          className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-                        />
-                        <span className="text-sm text-gray-700">CROSSED</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={currentEndBowls.playerB[i].short}
-                          onChange={() => toggleBowlShort('playerB', i)}
-                          className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-                        />
-                        <span className="text-sm text-gray-700">SHORT</span>
                       </label>
                     </div>
                   </div>
@@ -707,35 +707,33 @@ const LeadVsLeadDrill: React.FC = () => {
           {ends.length > 0 && (
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-[#34533A] mb-4">Scorecard</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse text-sm">
-                  <thead>
-                    <tr className="bg-[#C7D9C2]">
-                      <th className="border border-gray-300 px-2 py-2">End</th>
-                      <th className="border border-gray-300 px-2 py-2">Shot Winner</th>
-                      <th className="border border-gray-300 px-2 py-2">Shots</th>
-                      <th className="border border-gray-300 px-2 py-2">{playerAName} Pts</th>
-                      <th className="border border-gray-300 px-2 py-2">{playerBName} Pts</th>
-                      <th className="border border-gray-300 px-2 py-2">Cum {playerAName}</th>
-                      <th className="border border-gray-300 px-2 py-2">Cum {playerBName}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {ends.map((end, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50">
-                        <td className="border border-gray-300 px-2 py-2 text-center">{idx + 1}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center">
-                          {end.shotWinner === 'playerA' ? playerAName : playerBName}
-                        </td>
-                        <td className="border border-gray-300 px-2 py-2 text-center">{end.shotsWon}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center">{end.playerAPoints}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center">{end.playerBPoints}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerACumulative}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerBCumulative}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="space-y-4">
+                {ends.map((end, idx) => (
+                  <div key={idx} className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
+                      <div className="text-lg font-bold text-[#34533A]">End {idx + 1}</div>
+                      <div className="text-sm text-gray-600">
+                        <span className="font-semibold">{end.shotWinner === 'playerA' ? playerAName : playerBName}</span> won {end.shotsWon} shot{end.shotsWon > 1 ? 's' : ''}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-gray-700">{playerAName}</span>
+                        <div className="flex items-center gap-4">
+                          <span className="text-gray-600">{end.playerAPoints} pts</span>
+                          <span className="text-lg font-bold text-[#547A51]">{end.playerACumulative}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-gray-700">{playerBName}</span>
+                        <div className="flex items-center gap-4">
+                          <span className="text-gray-600">{end.playerBPoints} pts</span>
+                          <span className="text-lg font-bold text-[#547A51]">{end.playerBCumulative}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
@@ -871,35 +869,35 @@ const LeadVsLeadDrill: React.FC = () => {
             </p>
           </div>
 
-          <div className="overflow-x-auto mb-6">
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr className="bg-[#C7D9C2]">
-                  <th className="border border-gray-300 px-2 py-2">End</th>
-                  <th className="border border-gray-300 px-2 py-2">Shot Winner</th>
-                  <th className="border border-gray-300 px-2 py-2">Shots</th>
-                  <th className="border border-gray-300 px-2 py-2">{playerAName} Pts</th>
-                  <th className="border border-gray-300 px-2 py-2">{playerBName} Pts</th>
-                  <th className="border border-gray-300 px-2 py-2">Cum {playerAName}</th>
-                  <th className="border border-gray-300 px-2 py-2">Cum {playerBName}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ends.map((end, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 px-2 py-2 text-center">{idx + 1}</td>
-                    <td className="border border-gray-300 px-2 py-2 text-center">
-                      {end.shotWinner === 'playerA' ? playerAName : playerBName}
-                    </td>
-                    <td className="border border-gray-300 px-2 py-2 text-center">{end.shotsWon}</td>
-                    <td className="border border-gray-300 px-2 py-2 text-center">{end.playerAPoints}</td>
-                    <td className="border border-gray-300 px-2 py-2 text-center">{end.playerBPoints}</td>
-                    <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerACumulative}</td>
-                    <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerBCumulative}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mb-6">
+            <div className="space-y-4">
+              {ends.map((end, idx) => (
+                <div key={idx} className="bg-white border border-gray-300 rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
+                    <div className="text-lg font-bold text-[#34533A]">End {idx + 1}</div>
+                    <div className="text-sm text-gray-600">
+                      <span className="font-semibold">{end.shotWinner === 'playerA' ? playerAName : playerBName}</span> won {end.shotsWon} shot{end.shotsWon > 1 ? 's' : ''}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-gray-700">{playerAName}</span>
+                      <div className="flex items-center gap-4">
+                        <span className="text-gray-600">{end.playerAPoints} pts</span>
+                        <span className="text-lg font-bold text-[#547A51]">{end.playerACumulative}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-gray-700">{playerBName}</span>
+                      <div className="flex items-center gap-4">
+                        <span className="text-gray-600">{end.playerBPoints} pts</span>
+                        <span className="text-lg font-bold text-[#547A51]">{end.playerBCumulative}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {stats && (
