@@ -642,10 +642,8 @@ const SecondsChanceDrill: React.FC = () => {
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => {
                   const bowl = currentEndBowls.playerA[i];
                   let criteria = '';
-                  if (i === 0) {
+                  if (i === 0 || i === 2) {
                     criteria = 'Between jack and 2m beyond, within mat length to side, no crossing';
-                  } else if (bowlsPerPlayer === 4 && i === 2) {
-                    criteria = 'Between jack and 2m beyond, within mat length to side, no crossing (opposite hand)';
                   } else {
                     criteria = 'Within mat length of jack';
                   }
@@ -683,10 +681,8 @@ const SecondsChanceDrill: React.FC = () => {
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => {
                   const bowl = currentEndBowls.playerB[i];
                   let criteria = '';
-                  if (i === 0) {
+                  if (i === 0 || i === 2) {
                     criteria = 'Between jack and 2m beyond, within mat length to side, no crossing';
-                  } else if (bowlsPerPlayer === 4 && i === 2) {
-                    criteria = 'Between jack and 2m beyond, within mat length to side, no crossing (opposite hand)';
                   } else {
                     criteria = 'Within mat length of jack';
                   }

@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
       title: '2nd\'s Chance',
       icon: RefreshCw,
       description: 'Position practice with alternating hands',
-      isPremium: true,
+      isPremium: false,
       comingSoon: false,
     },
     {
