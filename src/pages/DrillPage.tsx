@@ -105,8 +105,9 @@ const drillsData: Record<string, any> = {
     instructions: [
       'Set up a game for 2 players with 2-4 bowls per player',
       'Choose the number of ends (default 10)',
-      'Mark each bowl as HELD, CROSSED, SHORT, or NONE',
-      'Score 3 points for each shot you hold',
+      'Mark each bowl as GOOD, CROSSED and/or SHORT',
+      'Use checkbox to mark good bowls and radio buttons for penalties',
+      'Score 3 points for each shot you hold (player with most good bowls)',
       'Each crossed or short bowl deducts 1 point',
       'Track cumulative scores and statistics throughout the game',
     ],

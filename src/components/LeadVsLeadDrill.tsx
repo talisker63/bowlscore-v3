@@ -4,19 +4,25 @@ import html2canvas from 'html2canvas';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 
-type BowlResult = 'HELD' | 'CROSSED' | 'SHORT' | 'NONE';
+interface BowlResult {
+  good: boolean;
+  crossed: boolean;
+  short: boolean;
+}
 
 interface EndResult {
   playerA: BowlResult[];
   playerB: BowlResult[];
-  playerAHeld: number;
-  playerBHeld: number;
+  playerAGood: number;
+  playerBGood: number;
   playerAPoints: number;
   playerBPoints: number;
   playerACumulative: number;
   playerBCumulative: number;
-  crossed: number;
-  short: number;
+  playerACrossed: number;
+  playerBCrossed: number;
+  playerAShort: number;
+  playerBShort: number;
 }
 
 interface GameSession {
@@ -60,8 +66,8 @@ const LeadVsLeadDrill: React.FC = () => {
     playerA: BowlResult[];
     playerB: BowlResult[];
   }>({
-    playerA: Array(4).fill('NONE'),
-    playerB: Array(4).fill('NONE'),
+    playerA: Array(4).fill({ good: false, crossed: false, short: false }),
+    playerB: Array(4).fill({ good: false, crossed: false, short: false }),
   });
 
   const [emailAddress, setEmailAddress] = useState('');
@@ -115,35 +121,46 @@ const LeadVsLeadDrill: React.FC = () => {
     setEnds([]);
     setCurrentEnd(0);
     setCurrentEndBowls({
-      playerA: Array(bowlsPerPlayer).fill('NONE'),
-      playerB: Array(bowlsPerPlayer).fill('NONE'),
+      playerA: Array(bowlsPerPlayer).fill(null).map(() => ({ good: false, crossed: false, short: false })),
+      playerB: Array(bowlsPerPlayer).fill(null).map(() => ({ good: false, crossed: false, short: false })),
     });
     setGameState('playing');
   };
 
-  const setBowlResult = (player: 'playerA' | 'playerB', bowlIndex: number, result: BowlResult) => {
+  const toggleBowlGood = (player: 'playerA' | 'playerB', bowlIndex: number) => {
     setCurrentEndBowls(prev => ({
       ...prev,
-      [player]: prev[player].map((r, i) => i === bowlIndex ? result : r),
+      [player]: prev[player].map((r, i) => i === bowlIndex ? { ...r, good: !r.good } : r),
+    }));
+  };
+
+  const setBowlPenalty = (player: 'playerA' | 'playerB', bowlIndex: number, penalty: 'crossed' | 'short' | 'none') => {
+    setCurrentEndBowls(prev => ({
+      ...prev,
+      [player]: prev[player].map((r, i) =>
+        i === bowlIndex
+          ? { ...r, crossed: penalty === 'crossed', short: penalty === 'short' }
+          : r
+      ),
     }));
   };
 
   const completeEnd = () => {
-    const playerAHeld = currentEndBowls.playerA.filter(r => r === 'HELD').length;
-    const playerBHeld = currentEndBowls.playerB.filter(r => r === 'HELD').length;
+    const playerAGood = currentEndBowls.playerA.filter(r => r.good).length;
+    const playerBGood = currentEndBowls.playerB.filter(r => r.good).length;
 
-    const playerACrossed = currentEndBowls.playerA.filter(r => r === 'CROSSED').length;
-    const playerBCrossed = currentEndBowls.playerB.filter(r => r === 'CROSSED').length;
-    const playerAShort = currentEndBowls.playerA.filter(r => r === 'SHORT').length;
-    const playerBShort = currentEndBowls.playerB.filter(r => r === 'SHORT').length;
+    const playerACrossed = currentEndBowls.playerA.filter(r => r.crossed).length;
+    const playerBCrossed = currentEndBowls.playerB.filter(r => r.crossed).length;
+    const playerAShort = currentEndBowls.playerA.filter(r => r.short).length;
+    const playerBShort = currentEndBowls.playerB.filter(r => r.short).length;
 
     let playerAPoints = 0;
     let playerBPoints = 0;
 
-    if (playerAHeld > playerBHeld) {
-      playerAPoints = playerAHeld * 3;
-    } else if (playerBHeld > playerAHeld) {
-      playerBPoints = playerBHeld * 3;
+    if (playerAGood > playerBGood) {
+      playerAPoints = playerAGood * 3;
+    } else if (playerBGood > playerAGood) {
+      playerBPoints = playerBGood * 3;
     }
 
     playerAPoints -= (playerACrossed + playerAShort);
@@ -153,16 +170,18 @@ const LeadVsLeadDrill: React.FC = () => {
     const previousCumulativeB = ends.length > 0 ? ends[ends.length - 1].playerBCumulative : 0;
 
     const newEnd: EndResult = {
-      playerA: [...currentEndBowls.playerA],
-      playerB: [...currentEndBowls.playerB],
-      playerAHeld,
-      playerBHeld,
+      playerA: currentEndBowls.playerA.map(r => ({ ...r })),
+      playerB: currentEndBowls.playerB.map(r => ({ ...r })),
+      playerAGood,
+      playerBGood,
       playerAPoints,
       playerBPoints,
       playerACumulative: previousCumulativeA + playerAPoints,
       playerBCumulative: previousCumulativeB + playerBPoints,
-      crossed: playerACrossed + playerBCrossed,
-      short: playerAShort + playerBShort,
+      playerACrossed,
+      playerBCrossed,
+      playerAShort,
+      playerBShort,
     };
 
     setEnds(prev => [...prev, newEnd]);
@@ -172,27 +191,18 @@ const LeadVsLeadDrill: React.FC = () => {
     } else {
       setCurrentEnd(prev => prev + 1);
       setCurrentEndBowls({
-        playerA: Array(bowlsPerPlayer).fill('NONE'),
-        playerB: Array(bowlsPerPlayer).fill('NONE'),
+        playerA: Array(bowlsPerPlayer).fill(null).map(() => ({ good: false, crossed: false, short: false })),
+        playerB: Array(bowlsPerPlayer).fill(null).map(() => ({ good: false, crossed: false, short: false })),
       });
     }
   };
 
   const calculateStats = () => {
-    const playerATotalHeld = ends.reduce((sum, end) => sum + end.playerAHeld, 0);
-    const playerBTotalHeld = ends.reduce((sum, end) => sum + end.playerBHeld, 0);
+    const playerATotalHeld = ends.reduce((sum, end) => sum + end.playerAGood, 0);
+    const playerBTotalHeld = ends.reduce((sum, end) => sum + end.playerBGood, 0);
 
-    const playerATotalPenalties = ends.reduce((sum, end) => {
-      const crossed = end.playerA.filter(r => r === 'CROSSED').length;
-      const short = end.playerA.filter(r => r === 'SHORT').length;
-      return sum + crossed + short;
-    }, 0);
-
-    const playerBTotalPenalties = ends.reduce((sum, end) => {
-      const crossed = end.playerB.filter(r => r === 'CROSSED').length;
-      const short = end.playerB.filter(r => r === 'SHORT').length;
-      return sum + crossed + short;
-    }, 0);
+    const playerATotalPenalties = ends.reduce((sum, end) => sum + end.playerACrossed + end.playerAShort, 0);
+    const playerBTotalPenalties = ends.reduce((sum, end) => sum + end.playerBCrossed + end.playerBShort, 0);
 
     const playerAFinalScore = ends.length > 0 ? ends[ends.length - 1].playerACumulative : 0;
     const playerBFinalScore = ends.length > 0 ? ends[ends.length - 1].playerBCumulative : 0;
@@ -590,30 +600,52 @@ const LeadVsLeadDrill: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div>
               <h3 className="text-lg font-semibold text-[#34533A] mb-4">{playerAName}</h3>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => (
-                  <div key={i} className="flex gap-2">
-                    <span className="text-sm font-medium text-gray-700 w-16">Bowl {i + 1}:</span>
-                    <div className="flex gap-2 flex-wrap">
-                      {(['HELD', 'CROSSED', 'SHORT', 'NONE'] as BowlResult[]).map((result) => (
-                        <button
-                          key={result}
-                          onClick={() => setBowlResult('playerA', i, result)}
-                          className={`px-3 py-1 text-sm rounded transition-colors ${
-                            currentEndBowls.playerA[i] === result
-                              ? result === 'HELD'
-                                ? 'bg-green-600 text-white'
-                                : result === 'CROSSED'
-                                ? 'bg-red-600 text-white'
-                                : result === 'SHORT'
-                                ? 'bg-orange-600 text-white'
-                                : 'bg-gray-400 text-white'
-                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                          }`}
-                        >
-                          {result}
-                        </button>
-                      ))}
+                  <div key={i} className="border border-gray-200 rounded-lg p-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-sm font-semibold text-gray-700 w-16">Bowl {i + 1}:</span>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={currentEndBowls.playerA[i].good}
+                          onChange={() => toggleBowlGood('playerA', i)}
+                          className="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                        />
+                        <span className="text-sm font-medium text-gray-700">GOOD</span>
+                      </label>
+                    </div>
+                    <div className="flex gap-4 ml-20">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`playerA-bowl-${i}`}
+                          checked={currentEndBowls.playerA[i].crossed}
+                          onChange={() => setBowlPenalty('playerA', i, 'crossed')}
+                          className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500"
+                        />
+                        <span className="text-sm text-gray-700">CROSSED</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`playerA-bowl-${i}`}
+                          checked={currentEndBowls.playerA[i].short}
+                          onChange={() => setBowlPenalty('playerA', i, 'short')}
+                          className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
+                        />
+                        <span className="text-sm text-gray-700">SHORT</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`playerA-bowl-${i}`}
+                          checked={!currentEndBowls.playerA[i].crossed && !currentEndBowls.playerA[i].short}
+                          onChange={() => setBowlPenalty('playerA', i, 'none')}
+                          className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
+                        />
+                        <span className="text-sm text-gray-700">None</span>
+                      </label>
                     </div>
                   </div>
                 ))}
@@ -622,30 +654,52 @@ const LeadVsLeadDrill: React.FC = () => {
 
             <div>
               <h3 className="text-lg font-semibold text-[#34533A] mb-4">{playerBName}</h3>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => (
-                  <div key={i} className="flex gap-2">
-                    <span className="text-sm font-medium text-gray-700 w-16">Bowl {i + 1}:</span>
-                    <div className="flex gap-2 flex-wrap">
-                      {(['HELD', 'CROSSED', 'SHORT', 'NONE'] as BowlResult[]).map((result) => (
-                        <button
-                          key={result}
-                          onClick={() => setBowlResult('playerB', i, result)}
-                          className={`px-3 py-1 text-sm rounded transition-colors ${
-                            currentEndBowls.playerB[i] === result
-                              ? result === 'HELD'
-                                ? 'bg-green-600 text-white'
-                                : result === 'CROSSED'
-                                ? 'bg-red-600 text-white'
-                                : result === 'SHORT'
-                                ? 'bg-orange-600 text-white'
-                                : 'bg-gray-400 text-white'
-                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                          }`}
-                        >
-                          {result}
-                        </button>
-                      ))}
+                  <div key={i} className="border border-gray-200 rounded-lg p-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-sm font-semibold text-gray-700 w-16">Bowl {i + 1}:</span>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={currentEndBowls.playerB[i].good}
+                          onChange={() => toggleBowlGood('playerB', i)}
+                          className="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                        />
+                        <span className="text-sm font-medium text-gray-700">GOOD</span>
+                      </label>
+                    </div>
+                    <div className="flex gap-4 ml-20">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`playerB-bowl-${i}`}
+                          checked={currentEndBowls.playerB[i].crossed}
+                          onChange={() => setBowlPenalty('playerB', i, 'crossed')}
+                          className="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500"
+                        />
+                        <span className="text-sm text-gray-700">CROSSED</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`playerB-bowl-${i}`}
+                          checked={currentEndBowls.playerB[i].short}
+                          onChange={() => setBowlPenalty('playerB', i, 'short')}
+                          className="w-4 h-4 text-orange-600 border-gray-300 focus:ring-orange-500"
+                        />
+                        <span className="text-sm text-gray-700">SHORT</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name={`playerB-bowl-${i}`}
+                          checked={!currentEndBowls.playerB[i].crossed && !currentEndBowls.playerB[i].short}
+                          onChange={() => setBowlPenalty('playerB', i, 'none')}
+                          className="w-4 h-4 text-gray-600 border-gray-300 focus:ring-gray-500"
+                        />
+                        <span className="text-sm text-gray-700">None</span>
+                      </label>
                     </div>
                   </div>
                 ))}
@@ -665,8 +719,6 @@ const LeadVsLeadDrill: React.FC = () => {
                       <th className="border border-gray-300 px-2 py-2">{playerBName} Pts</th>
                       <th className="border border-gray-300 px-2 py-2">Cum {playerAName}</th>
                       <th className="border border-gray-300 px-2 py-2">Cum {playerBName}</th>
-                      <th className="border border-gray-300 px-2 py-2">Crossed</th>
-                      <th className="border border-gray-300 px-2 py-2">Short</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -677,8 +729,6 @@ const LeadVsLeadDrill: React.FC = () => {
                         <td className="border border-gray-300 px-2 py-2 text-center">{end.playerBPoints}</td>
                         <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerACumulative}</td>
                         <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerBCumulative}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center">{end.crossed}</td>
-                        <td className="border border-gray-300 px-2 py-2 text-center">{end.short}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -740,8 +790,6 @@ const LeadVsLeadDrill: React.FC = () => {
                   <th className="border border-gray-300 px-2 py-2">{playerBName} Pts</th>
                   <th className="border border-gray-300 px-2 py-2">Cum {playerAName}</th>
                   <th className="border border-gray-300 px-2 py-2">Cum {playerBName}</th>
-                  <th className="border border-gray-300 px-2 py-2">Crossed</th>
-                  <th className="border border-gray-300 px-2 py-2">Short</th>
                 </tr>
               </thead>
               <tbody>
@@ -752,8 +800,6 @@ const LeadVsLeadDrill: React.FC = () => {
                     <td className="border border-gray-300 px-2 py-2 text-center">{end.playerBPoints}</td>
                     <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerACumulative}</td>
                     <td className="border border-gray-300 px-2 py-2 text-center font-semibold">{end.playerBCumulative}</td>
-                    <td className="border border-gray-300 px-2 py-2 text-center">{end.crossed}</td>
-                    <td className="border border-gray-300 px-2 py-2 text-center">{end.short}</td>
                   </tr>
                 ))}
               </tbody>
