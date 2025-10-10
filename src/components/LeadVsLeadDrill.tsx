@@ -635,36 +635,34 @@ const LeadVsLeadDrill: React.FC = () => {
               <div className="space-y-3">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => (
                   <div key={i} className="border border-gray-200 rounded-lg p-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={currentEndBowls.playerA[i].crossed}
-                            onChange={() => toggleBowlCrossed('playerA', i)}
-                            className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-                          />
-                          <span className="text-xs text-gray-700">X</span>
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={currentEndBowls.playerA[i].short}
-                            onChange={() => toggleBowlShort('playerA', i)}
-                            className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-                          />
-                          <span className="text-xs text-gray-700">S</span>
-                        </label>
-                      </div>
-                      <span className="text-sm font-semibold text-gray-700">Bowl {i + 1}</span>
-                      <label className="flex items-center gap-2 cursor-pointer">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-semibold text-gray-700 w-16">Bowl {i + 1}</span>
+                      <label className="flex items-center gap-1 cursor-pointer">
                         <input
                           type="checkbox"
                           checked={currentEndBowls.playerA[i].good}
                           onChange={() => toggleBowlGood('playerA', i)}
                           className="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500"
                         />
-                        <span className="text-sm font-medium text-gray-700">GOOD</span>
+                        <span className="text-xs font-medium text-gray-700">Good</span>
+                      </label>
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={currentEndBowls.playerA[i].crossed}
+                          onChange={() => toggleBowlCrossed('playerA', i)}
+                          className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                        />
+                        <span className="text-xs text-gray-700">X</span>
+                      </label>
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={currentEndBowls.playerA[i].short}
+                          onChange={() => toggleBowlShort('playerA', i)}
+                          className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                        />
+                        <span className="text-xs text-gray-700">S</span>
                       </label>
                     </div>
                   </div>
@@ -677,36 +675,34 @@ const LeadVsLeadDrill: React.FC = () => {
               <div className="space-y-3">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => (
                   <div key={i} className="border border-gray-200 rounded-lg p-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={currentEndBowls.playerB[i].crossed}
-                            onChange={() => toggleBowlCrossed('playerB', i)}
-                            className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
-                          />
-                          <span className="text-xs text-gray-700">X</span>
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={currentEndBowls.playerB[i].short}
-                            onChange={() => toggleBowlShort('playerB', i)}
-                            className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
-                          />
-                          <span className="text-xs text-gray-700">S</span>
-                        </label>
-                      </div>
-                      <span className="text-sm font-semibold text-gray-700">Bowl {i + 1}</span>
-                      <label className="flex items-center gap-2 cursor-pointer">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-semibold text-gray-700 w-16">Bowl {i + 1}</span>
+                      <label className="flex items-center gap-1 cursor-pointer">
                         <input
                           type="checkbox"
                           checked={currentEndBowls.playerB[i].good}
                           onChange={() => toggleBowlGood('playerB', i)}
                           className="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500"
                         />
-                        <span className="text-sm font-medium text-gray-700">GOOD</span>
+                        <span className="text-xs font-medium text-gray-700">Good</span>
+                      </label>
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={currentEndBowls.playerB[i].crossed}
+                          onChange={() => toggleBowlCrossed('playerB', i)}
+                          className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                        />
+                        <span className="text-xs text-gray-700">X</span>
+                      </label>
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={currentEndBowls.playerB[i].short}
+                          onChange={() => toggleBowlShort('playerB', i)}
+                          className="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500"
+                        />
+                        <span className="text-xs text-gray-700">S</span>
                       </label>
                     </div>
                   </div>
