@@ -386,7 +386,14 @@ const SecondsChanceDrill: React.FC = () => {
     }
   };
 
-  const resetGame = () => {
+  const resetResults = () => {
+    setCurrentEnd(0);
+    setEnds([]);
+    initializeEndBowls(0);
+    setGameState('setup');
+  };
+
+  const resetAll = () => {
     setGameState('setup');
     setCurrentEnd(0);
     setEnds([]);
@@ -397,6 +404,7 @@ const SecondsChanceDrill: React.FC = () => {
     setSurfaceType('');
     setBowlsPerPlayer(4);
     setNumberOfEnds(10);
+    setEmailAddress('');
   };
 
   const loadSession = (session: GameSession) => {
@@ -940,60 +948,69 @@ const SecondsChanceDrill: React.FC = () => {
           )}
         </div>
 
-        <div className="flex flex-wrap gap-4">
-          {user && profile?.is_premium && (
-            <>
-              <button
-                onClick={downloadImage}
-                className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors"
-              >
-                <Download size={20} />
-                Download Image
-              </button>
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-4">
+            <button
+              onClick={downloadImage}
+              disabled={!user || !profile?.is_premium}
+              className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+            >
+              <Download size={20} />
+              Download Image
+            </button>
 
-              <button
-                onClick={saveSession}
-                disabled={isSaving}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-              >
-                <Calendar size={20} />
-                {isSaving ? 'Saving...' : 'Save Game'}
-              </button>
+            <button
+              onClick={saveSession}
+              disabled={isSaving || !user || !profile?.is_premium}
+              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+            >
+              <Calendar size={20} />
+              {isSaving ? 'Saving...' : 'Save Game'}
+            </button>
 
-              <div className="flex gap-2 flex-1">
-                <input
-                  type="email"
-                  value={emailAddress}
-                  onChange={(e) => setEmailAddress(e.target.value)}
-                  placeholder="Email address"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#547A51] focus:border-transparent"
-                />
-                <button
-                  onClick={sendEmail}
-                  disabled={isSendingEmail}
-                  className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50"
-                >
-                  <Mail size={20} />
-                  {isSendingEmail ? 'Sending...' : 'Email'}
-                </button>
-              </div>
-            </>
-          )}
+            <div className="flex gap-2 flex-1 min-w-[300px]">
+              <input
+                type="email"
+                value={emailAddress}
+                onChange={(e) => setEmailAddress(e.target.value)}
+                placeholder="Email address"
+                disabled={!user || !profile?.is_premium}
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#547A51] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+              <button
+                onClick={sendEmail}
+                disabled={isSendingEmail || !user || !profile?.is_premium}
+                className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400"
+              >
+                <Mail size={20} />
+                {isSendingEmail ? 'Sending...' : 'Email'}
+              </button>
+            </div>
+          </div>
 
           {!profile?.is_premium && (
-            <div className="flex-1 bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
               <p className="font-semibold mb-1">Premium Feature</p>
-              <p>Upgrade to premium to save game history and email results.</p>
+              <p>Upgrade to premium to download, save game history, and email results.</p>
             </div>
           )}
 
-          <button
-            onClick={resetGame}
-            className="flex items-center gap-2 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-          >
-            <RotateCcw size={20} />
-            New Game
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={resetResults}
+              className="flex items-center gap-2 px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              <RotateCcw size={20} />
+              Reset Results
+            </button>
+            <button
+              onClick={resetAll}
+              className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              <RotateCcw size={20} />
+              Reset All
+            </button>
+          </div>
         </div>
       </div>
     </div>
