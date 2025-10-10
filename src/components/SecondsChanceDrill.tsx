@@ -641,9 +641,14 @@ const SecondsChanceDrill: React.FC = () => {
               <div className="space-y-3">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => {
                   const bowl = currentEndBowls.playerA[i];
-                  const criteria = i === 0
-                    ? 'Between jack and 2m beyond, within mat length to side, no crossing'
-                    : 'Within mat length of jack';
+                  let criteria = '';
+                  if (i === 0) {
+                    criteria = 'Between jack and 2m beyond, within mat length to side, no crossing';
+                  } else if (bowlsPerPlayer === 4 && i === 2) {
+                    criteria = 'Between jack and 2m beyond, within mat length to side, no crossing (opposite hand)';
+                  } else {
+                    criteria = 'Within mat length of jack';
+                  }
                   return (
                     <div key={i} className="border border-gray-200 rounded-lg p-3">
                       <div className="flex items-center justify-between gap-2 mb-2">
@@ -677,9 +682,14 @@ const SecondsChanceDrill: React.FC = () => {
               <div className="space-y-3">
                 {Array.from({ length: bowlsPerPlayer }).map((_, i) => {
                   const bowl = currentEndBowls.playerB[i];
-                  const criteria = i === 0
-                    ? 'Between jack and 2m beyond, within mat length to side, no crossing'
-                    : 'Within mat length of jack';
+                  let criteria = '';
+                  if (i === 0) {
+                    criteria = 'Between jack and 2m beyond, within mat length to side, no crossing';
+                  } else if (bowlsPerPlayer === 4 && i === 2) {
+                    criteria = 'Between jack and 2m beyond, within mat length to side, no crossing (opposite hand)';
+                  } else {
+                    criteria = 'Within mat length of jack';
+                  }
                   return (
                     <div key={i} className="border border-gray-200 rounded-lg p-3">
                       <div className="flex items-center justify-between gap-2 mb-2">
