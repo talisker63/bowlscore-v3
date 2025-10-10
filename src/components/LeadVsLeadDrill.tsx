@@ -142,14 +142,14 @@ const LeadVsLeadDrill: React.FC = () => {
   const toggleBowlCrossed = (player: 'playerA' | 'playerB', bowlIndex: number) => {
     setCurrentEndBowls(prev => ({
       ...prev,
-      [player]: prev[player].map((r, i) => i === bowlIndex ? { ...r, crossed: !r.crossed } : r),
+      [player]: prev[player].map((r, i) => i === bowlIndex ? { ...r, crossed: !r.crossed, good: r.crossed ? r.good : false } : r),
     }));
   };
 
   const toggleBowlShort = (player: 'playerA' | 'playerB', bowlIndex: number) => {
     setCurrentEndBowls(prev => ({
       ...prev,
-      [player]: prev[player].map((r, i) => i === bowlIndex ? { ...r, short: !r.short } : r),
+      [player]: prev[player].map((r, i) => i === bowlIndex ? { ...r, short: !r.short, good: r.short ? r.good : false } : r),
     }));
   };
 
@@ -223,20 +223,16 @@ const LeadVsLeadDrill: React.FC = () => {
     const playerATotalHeld = ends.reduce((sum, end) => sum + end.playerAGood, 0);
     const playerBTotalHeld = ends.reduce((sum, end) => sum + end.playerBGood, 0);
 
-    const playerATotalPenalties = ends.reduce((sum, end) => sum + end.playerACrossed + end.playerAShort, 0);
-    const playerBTotalPenalties = ends.reduce((sum, end) => sum + end.playerBCrossed + end.playerBShort, 0);
+    const playerATotalCrossed = ends.reduce((sum, end) => sum + end.playerACrossed, 0);
+    const playerBTotalCrossed = ends.reduce((sum, end) => sum + end.playerBCrossed, 0);
+    const playerATotalShort = ends.reduce((sum, end) => sum + end.playerAShort, 0);
+    const playerBTotalShort = ends.reduce((sum, end) => sum + end.playerBShort, 0);
+
+    const playerATotalPenalties = playerATotalCrossed + playerATotalShort;
+    const playerBTotalPenalties = playerBTotalCrossed + playerBTotalShort;
 
     const playerAFinalScore = ends.length > 0 ? ends[ends.length - 1].playerACumulative : 0;
     const playerBFinalScore = ends.length > 0 ? ends[ends.length - 1].playerBCumulative : 0;
-
-    const playerAAverage = ends.length > 0 ? playerAFinalScore / ends.length : 0;
-    const playerBAverage = ends.length > 0 ? playerBFinalScore / ends.length : 0;
-
-    const playerAVariance = ends.reduce((sum, end) => sum + Math.pow(end.playerAPoints - playerAAverage, 2), 0) / ends.length;
-    const playerBVariance = ends.reduce((sum, end) => sum + Math.pow(end.playerBPoints - playerBAverage, 2), 0) / ends.length;
-
-    const playerAStdDev = Math.sqrt(playerAVariance);
-    const playerBStdDev = Math.sqrt(playerBVariance);
 
     const winner = playerAFinalScore > playerBFinalScore ? playerAName :
                    playerBFinalScore > playerAFinalScore ? playerBName : 'Draw';
@@ -244,14 +240,14 @@ const LeadVsLeadDrill: React.FC = () => {
     return {
       playerATotalHeld,
       playerBTotalHeld,
+      playerATotalCrossed,
+      playerBTotalCrossed,
+      playerATotalShort,
+      playerBTotalShort,
       playerATotalPenalties,
       playerBTotalPenalties,
       playerAFinalScore,
       playerBFinalScore,
-      playerAAverage,
-      playerBAverage,
-      playerAStdDev,
-      playerBStdDev,
       winner,
     };
   };
@@ -745,12 +741,20 @@ const LeadVsLeadDrill: React.FC = () => {
             </div>
           )}
 
-          <button
-            onClick={moveToEndComplete}
-            className="w-full bg-[#547A51] text-white px-6 py-3 rounded-lg hover:bg-[#34533A] transition-colors font-semibold"
-          >
-            Complete End
-          </button>
+          <div className="space-y-3">
+            <button
+              onClick={moveToEndComplete}
+              className="w-full bg-[#547A51] text-white px-6 py-3 rounded-lg hover:bg-[#34533A] transition-colors font-semibold"
+            >
+              Complete End
+            </button>
+            <button
+              onClick={() => setGameState('summary')}
+              className="w-full bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+            >
+              Complete Drill Early
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -917,16 +921,8 @@ const LeadVsLeadDrill: React.FC = () => {
                     <span className="font-semibold">{stats.playerATotalHeld}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Total Penalties:</span>
-                    <span className="font-semibold">{stats.playerATotalPenalties}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Average Per End:</span>
-                    <span className="font-semibold">{stats.playerAAverage.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Std Deviation:</span>
-                    <span className="font-semibold">{stats.playerAStdDev.toFixed(2)}</span>
+                    <span className="text-gray-600">Penalties:</span>
+                    <span className="font-semibold">{stats.playerATotalPenalties} ({stats.playerATotalCrossed} crossed, {stats.playerATotalShort} short)</span>
                   </div>
                 </div>
               </div>
@@ -939,16 +935,8 @@ const LeadVsLeadDrill: React.FC = () => {
                     <span className="font-semibold">{stats.playerBTotalHeld}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Total Penalties:</span>
-                    <span className="font-semibold">{stats.playerBTotalPenalties}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Average Per End:</span>
-                    <span className="font-semibold">{stats.playerBAverage.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Std Deviation:</span>
-                    <span className="font-semibold">{stats.playerBStdDev.toFixed(2)}</span>
+                    <span className="text-gray-600">Penalties:</span>
+                    <span className="font-semibold">{stats.playerBTotalPenalties} ({stats.playerBTotalCrossed} crossed, {stats.playerBTotalShort} short)</span>
                   </div>
                 </div>
               </div>
@@ -957,16 +945,16 @@ const LeadVsLeadDrill: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap gap-4">
-          <button
-            onClick={downloadImage}
-            className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors"
-          >
-            <Download size={20} />
-            Download Image
-          </button>
-
           {user && profile?.is_premium && (
             <>
+              <button
+                onClick={downloadImage}
+                className="flex items-center gap-2 px-6 py-3 bg-[#547A51] text-white rounded-lg hover:bg-[#34533A] transition-colors"
+              >
+                <Download size={20} />
+                Download Image
+              </button>
+
               <button
                 onClick={saveSession}
                 disabled={isSaving}
