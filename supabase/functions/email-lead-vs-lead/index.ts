@@ -66,7 +66,7 @@ Deno.serve(async (req: Request) => {
                   <td style="padding: 8px 0;">${weather || 'N/A'}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px 0;"><strong>Green Speed:</strong></td>
+                  <td style="padding: 8px 0;"><strong>Surface Type:</strong></td>
                   <td style="padding: 8px 0;">${greenSpeed || 'N/A'}</td>
                 </tr>
               </table>

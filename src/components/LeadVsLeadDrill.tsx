@@ -57,7 +57,7 @@ const LeadVsLeadDrill: React.FC = () => {
   const [playerBName, setPlayerBName] = useState('');
   const [sessionDate, setSessionDate] = useState('');
   const [weather, setWeather] = useState<string[]>([]);
-  const [greenSpeed, setGreenSpeed] = useState('');
+  const [surfaceType, setSurfaceType] = useState('');
   const [bowlsPerPlayer, setBowlsPerPlayer] = useState(4);
   const [numberOfEnds, setNumberOfEnds] = useState(10);
 
@@ -288,7 +288,7 @@ const LeadVsLeadDrill: React.FC = () => {
           player_b_name: playerBName,
           session_date: sessionDate,
           weather: weather,
-          green_speed: greenSpeed,
+          green_speed: surfaceType,
           bowls_per_player: bowlsPerPlayer,
           number_of_ends: numberOfEnds,
           ends_data: ends,
@@ -348,7 +348,7 @@ const LeadVsLeadDrill: React.FC = () => {
           playerBName,
           sessionDate,
           weather: weather.join(', '),
-          greenSpeed,
+          greenSpeed: surfaceType,
           stats,
           ends,
           imageData,
@@ -374,7 +374,7 @@ const LeadVsLeadDrill: React.FC = () => {
     setPlayerBName('');
     setSessionDate('');
     setWeather([]);
-    setGreenSpeed('');
+    setSurfaceType('');
     setBowlsPerPlayer(4);
     setNumberOfEnds(10);
   };
@@ -384,7 +384,7 @@ const LeadVsLeadDrill: React.FC = () => {
     setPlayerBName(session.player_b_name);
     setSessionDate(session.session_date);
     setWeather(session.weather || []);
-    setGreenSpeed(session.green_speed);
+    setSurfaceType(session.green_speed);
     setBowlsPerPlayer(session.bowls_per_player);
     setNumberOfEnds(session.number_of_ends);
     setEnds(session.ends_data);
@@ -437,7 +437,7 @@ const LeadVsLeadDrill: React.FC = () => {
                 </div>
                 <div className="flex gap-4 text-sm text-gray-600">
                   <span>Weather: {session.weather?.join(', ') || 'N/A'}</span>
-                  <span>Speed: {session.green_speed}</span>
+                  <span>Surface: {session.green_speed}</span>
                   <span>{session.number_of_ends} ends</span>
                 </div>
               </div>
@@ -496,18 +496,17 @@ const LeadVsLeadDrill: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Green Speed
+                  Surface Type
                 </label>
                 <select
-                  value={greenSpeed}
-                  onChange={(e) => setGreenSpeed(e.target.value)}
+                  value={surfaceType}
+                  onChange={(e) => setSurfaceType(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#547A51] focus:border-transparent"
                 >
-                  <option value="">Select speed</option>
-                  <option value="slow">Slow</option>
-                  <option value="medium">Medium</option>
-                  <option value="fast">Fast</option>
-                  <option value="very-fast">Very Fast</option>
+                  <option value="">Select surface</option>
+                  <option value="grass">Grass</option>
+                  <option value="synthetic">Synthetic</option>
+                  <option value="weave">Weave</option>
                 </select>
               </div>
 
@@ -777,7 +776,7 @@ const LeadVsLeadDrill: React.FC = () => {
             <h2 className="text-2xl font-bold text-[#34533A]">Lead vs Lead Drill</h2>
             <p className="text-gray-600">{sessionDate}</p>
             <p className="text-sm text-gray-500">
-              {weather.join(', ')} {greenSpeed && `| ${greenSpeed} speed`}
+              {weather.join(', ')} {surfaceType && `| ${surfaceType}`}
             </p>
           </div>
 
