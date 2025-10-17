@@ -10,7 +10,9 @@ const Hero: React.FC = () => {
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#34533A] leading-tight">
               Lawn Bowls Score Cards and Drills
-              <span className="block text-sm font-normal text-gray-500 mt-2">(Alpha-2)</span>
+              <span className="block text-sm font-bold text-red-600 mt-2 max-w-md">
+                (Alpha-2 built by bolt.dev. This version will not be developed any further.)
+              </span>
             </h1>
             <p className="text-base text-gray-600">
               Master your game with professional training drills and digital scorekeeping.
